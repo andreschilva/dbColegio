@@ -1,5 +1,6 @@
 use db_colegio;
 
+-- 1
 INSERT INTO `area_conocimiento` (`id`, `nombre`, `activo`) VALUES
 (1, 'Comunidad y Sociedad', 1),
 (2, 'Ciencia Tecnologia y Produccion', 1),
