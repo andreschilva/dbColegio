@@ -13,22 +13,7 @@ where persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and
 and nota.grupo_materia_id = grupo_materia.id and nota.matricula_id = matricula.id and grupo_materia.materia_id = materia.id and materia.nombre = 'matematicas'
  and  grupo.nombre = 'Primero sec. A' and periodo.numero = 1 and periodo.gestion_id =  1 ;
  
- -- 3) mostrar todos los docentes de secundaria de turno 'manhana' que sea varones
- -- 4) mostrar los estudiantes por turno y por grupo
- -- 5) mostrar los horarios del grupo 'primera primaria A'
- -- 6) mostrar los grupos del turno tarde que tengan gestiones de tipo periodo trismestral
- -- 7) mostrar los nombres de los estudiantes cuya pago mensualidad tiene plazo hasta hoy dia
- -- 8) mostrar los permisos que tiene el perfil supAdmin
- -- 9) mostrar los estudiantes que tienen una nota menor a 51 en 'matematicas'
- -- 10) mostrar los 4 mejores estudiantes varones por grupos
-  -- 11) mostrar los 4 mejores estudiantes mujeres por grupos
- -- 12) mostrar el  estudiante con mayor nota promedio del colegio
- -- 13)mostrar los estudiantes cuyo apellido inicie con la letra 's'
- -- 14) mostrar los estudiantes inscritos en la gestion 2022
- -- 15) mostrar los docentes por grupo y turno
- -- 16) mostrar los docentes que dicten la materia de 'lenguaje' 
- -- 17) mostrar las notas de los estudiantes del grupo 'primero primaria A'  del periodo numero 1, gestion 2022
- -- 18) mostrar el nombre de los estudiantes que no tienen correo electronico o telefono 
+ -- 3)
 
 select * from estudiante;
 select * from persona;
@@ -40,14 +25,6 @@ select * from grupo_materia;
 select* from grupo;
 select* from grado;
 select* from nivel ;
-select* from gestion ;
-select* from perfil ;
-select* from permiso;
-select* from funcionalidad ;
-
-
-
-
 
 
 -- 1) Mostrar todas las areas de conocimientos activas actualmente
