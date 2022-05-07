@@ -13,10 +13,26 @@ where persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and
 and nota.grupo_materia_id = grupo_materia.id and nota.matricula_id = matricula.id and grupo_materia.materia_id = materia.id and materia.nombre = 'matematicas'
  and  grupo.nombre = 'Primero sec. A' and periodo.numero = 1 and periodo.gestion_id =  1 ;
  
- -- 3) mostrar todos los docentes de secundaria de turno 'manhana' que sea varones
+ -- 3) mostrar todos los docentes del grupo 'Primero sec. A' de turno 'manhana' que sean mujeres
+ select persona.id, persona.nombres, persona.genero,grupo.nombre, turno.nombre
+ from persona, docente, grupo_Materia,grupo, turno
+ where  persona.id = docente.id and grupo_materia.docente_id = docente.id and grupo_materia.grupo_id = grupo.id and grupo.turno_id = turno.id
+ and grupo.nombre = 'Primero sec. A' and turno.nombre = 'manhana' and persona.genero = 'F';
+ 
  -- 4) mostrar los estudiantes por turno y por grupo
- -- 5) mostrar los horarios del grupo 'primera primaria A'
+ select p.id, p.nombres, t.nombre, g.nombre
+ from persona p, estudiante e, matricula m, grupo g, turno t
+ where p.id = e.id and e.id = m.estudiante_id and m.grupo_id = g.id and g.turno_id = t.id;
+ 
+ -- 5) mostrar los horarios de las materias del grupo 'primero primaria A'
+ select horario.id, horario.dia, hora.hora_ini,hora.hora_fin, materia.nombre
+ from  grupo, grupo_materia, materia,horario, hora
+ where grupo.id = grupo_materia.grupo_id and grupo_materia.id = horario.grupo_materia_id 
+ and grupo_materia.materia_id = materia.id and horario.hora_id = hora.id 
+ and grupo.nombre = 'primero primaria A'
+ 
  -- 6) mostrar los grupos del turno tarde que tengan gestiones de tipo periodo trismestral
+ 
  -- 7) mostrar los nombres de los estudiantes cuya pago mensualidad tiene plazo hasta hoy dia
  -- 8) mostrar los permisos que tiene el perfil supAdmin
  -- 9) mostrar los estudiantes que tienen una nota menor a 51 en 'matematicas'
@@ -32,6 +48,7 @@ and nota.grupo_materia_id = grupo_materia.id and nota.matricula_id = matricula.i
 
 select * from estudiante;
 select * from persona;
+select * from docente;
 select * from matricula;
 select * from nota;
 select * from materia;
@@ -44,6 +61,9 @@ select* from gestion ;
 select* from perfil ;
 select* from permiso;
 select* from funcionalidad ;
+select* from turno;
+select * from horario;
+select* from hora;
 
 
 
