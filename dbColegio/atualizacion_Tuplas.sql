@@ -1,6 +1,6 @@
 use db_colegio;
 
--- 1
+
 INSERT INTO `area_conocimiento` (`id`, `nombre`, `activo`) VALUES
 (1, 'Comunidad y Sociedad', 1),
 (2, 'Ciencia Tecnologia y Produccion', 1),
@@ -218,6 +218,7 @@ INSERT INTO `turno` (`id`, `nombre`, `hora_ini`, `hora_fin`, `activo`) VALUES
 --
 
 INSERT INTO `grupo` (`id`, `codigo`, `nombre`, `cupos`, `gestion_id`, `turno_id`, `grado_id`, `aula_id`, `activo`) VALUES
+-- turno manhana
 (1, '1A', 'Primero primaria A', 30, 1, 1, 3, 1, 1),
 (2, '1B', 'Primero primaria B', 30, 1, 1, 3, 2, 1),
 (3, '2A', 'Segundo primaria A', 30, 1, 1, 4, 3, 1),
@@ -226,6 +227,17 @@ INSERT INTO `grupo` (`id`, `codigo`, `nombre`, `cupos`, `gestion_id`, `turno_id`
 (6, '2A', 'Segundo sec. A', 30, 1, 1, 10, 6, 1),
 (7, '3A', 'Tercero sec. A', 30, 1, 1,11, 7, 1),
 (8, '4A', 'Cuarto sec. A', 30, 1, 1, 12, 8, 1);
+
+-- turno tarde
+INSERT INTO `grupo` (`id`, `codigo`, `nombre`, `cupos`, `gestion_id`, `turno_id`, `grado_id`, `aula_id`, `activo`) VALUES
+(9, '1A', 'Primero primaria A', 30, 1, 2, 3, 1, 1),
+(10, '1B', 'Primero primaria B', 30, 1, 2, 3, 2, 1),
+(11, '2A', 'Segundo primaria A', 30, 1, 2, 4, 3, 1),
+(12, '3A', 'Tercero primaria A', 30, 1, 2, 5, 4, 1),
+(13, '1A', 'Primero sec. A', 30, 1, 2, 9, 5, 1),
+(14, '2A', 'Segundo sec. A', 30, 1, 2, 10, 6, 1),
+(15, '3A', 'Tercero sec. A', 30, 1, 2,11, 7, 1),
+(16, '4A', 'Cuarto sec. A', 30, 1, 2, 12, 8, 1);
 
 
 
@@ -315,11 +327,14 @@ INSERT INTO `nota` (`id`, `valor`, `grupo_materia_id`, `periodo_id`, `matricula_
 insert into nota values(13,60.00,2,1,5);
 
 
-delete from nota
+delete from nota;
 
+--
+-- tabla mensualidad
+--
 
-
-
-
-
+INSERT INTO mensualidad (`id`, `fecha_vencimiento`, `mes`,`monto`, `matricula_id`, `pagado`) values 
+(1,curdate(),'febrero',200.00,1,0),
+(2,'2022-05-9','febrero',200.00,2,0),
+(3,'2022-05-9','febrero',200.00,3,1);
 
