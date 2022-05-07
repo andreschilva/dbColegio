@@ -29,12 +29,24 @@ and nota.grupo_materia_id = grupo_materia.id and nota.matricula_id = matricula.i
  from  grupo, grupo_materia, materia,horario, hora
  where grupo.id = grupo_materia.grupo_id and grupo_materia.id = horario.grupo_materia_id 
  and grupo_materia.materia_id = materia.id and horario.hora_id = hora.id 
- and grupo.nombre = 'primero primaria A'
+ and grupo.nombre = 'primero primaria A';
  
- -- 6) mostrar los grupos del turno tarde que tengan gestiones de tipo periodo trismestral
+ -- 6) mostrar los grupos del turno tarde que tengan gestiones de tipo periodo bimestral 
+ select grupo.id, grupo.nombre, turno.nombre, gestion.tipo_periodo
+ from grupo, gestion, turno 
+ where grupo.gestion_id = gestion.id and grupo.turno_id = turno.id and gestion.numeros_periodos = '4' and turno.nombre = 'tarde';
  
- -- 7) mostrar los nombres de los estudiantes cuya pago mensualidad tiene plazo hasta hoy dia
+ -- 7) mostrar los nombres de los estudiantes que no pagaron mensualidad y cuyo pago mensualidad tiene plazo hasta hoy dia
+ select persona.id, persona.nombres, mensualidad.fecha_vencimiento, mensualidad.pagado
+ from persona, estudiante, matricula, mensualidad
+ where persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and mensualidad.matricula_id = matricula.id
+ and mensualidad.fecha_vencimiento = curdate() and mensualidad.pagado = 0;
+
  -- 8) mostrar los permisos que tiene el perfil supAdmin
+ select perfil.nombre, funcionalidad.nombre
+ from perfil, permiso, funcionalidad
+ where perfil.id = permiso.perfil_id and permiso.funcionalidad_id = funcionalidad.id and perfil.nombre = 'supAdmin'
+ 
  -- 9) mostrar los estudiantes que tienen una nota menor a 51 en 'matematicas'
  -- 10) mostrar los 4 mejores estudiantes varones por grupos
   -- 11) mostrar los 4 mejores estudiantes mujeres por grupos
@@ -64,6 +76,10 @@ select* from funcionalidad ;
 select* from turno;
 select * from horario;
 select* from hora;
+select* from mensualidad;
+select* from pago;
+
+
 
 
 
