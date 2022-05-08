@@ -343,7 +343,7 @@ select * from materia;
 
 call BuscarEstudiantesConNotaIgualA(82);
 
--- este procedimiento devulve una tabla  con los estudiantes que tengan una 
+-- este procedimiento devuelve una tabla  con los estudiantes que tengan una 
 -- nota mayor a la que pongamos en su parametro de entrada
 delimiter // 
 DROP PROCEDURE IF EXISTS BuscarEstudiantesConNotaMayorA//
@@ -362,5 +362,16 @@ select * from materia;
 
 call BuscarEstudiantesConNotaMayorA(51);
 
+-- mouestra todos los docentes por grupo y por turno 
+delimiter // 
+DROP PROCEDURE IF EXISTS buscardocentesPorGrupo//
+CREATE procedure buscardocentesPorGrupo(in nombreGrupo varchar(50), in turno varchar(15))
+BEGIN
+ select persona.id, persona.nombres, grupo.nombre, turno.nombre
+ from persona, docente, grupo_Materia,grupo, turno
+ where  persona.id = docente.id and grupo_materia.docente_id = docente.id and grupo_materia.grupo_id = grupo.id and grupo.turno_id = turno.id
+ and grupo.nombre = nombreGrupo and turno.nombre = turno;
+END//
+delimiter ;
 
-
+call buscardocentesPorGrupo('Primero primaria A', 'manhana');
