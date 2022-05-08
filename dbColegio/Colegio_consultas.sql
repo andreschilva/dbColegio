@@ -375,3 +375,54 @@ END//
 delimiter ;
 
 call buscardocentesPorGrupo('Primero primaria A', 'manhana');
+
+
+-- triggers
+-- -------------------------------------------------------------
+-- 1)
+delimiter // 
+DROP trigger IF EXISTS ActualizarMensualidadPagada//
+CREATE trigger ActualizarMensualidadPagada after insert on pago
+for each row
+BEGIN
+	declare idmensualidad int;
+	set idmensualidad= new.mensualidad_id;
+	update mensualidad set pagado = 1 where mensualidad.id = idmensualidad;
+END//
+delimiter ;
+
+select* from mensualidad;
+select* from pago;
+
+update mensualidad set pagado = 0 where  mensualidad.id = 3;
+insert into pago values(1, curdate(),200.00,1,0);
+insert into pago values(2, curdate(),200.00,3,0);
+delete from pago
+-- -------------------------------------------------------------------
+-- 2)
+-- disminuye los cupos de un grupo al matricular un nuevo estudiante
+delimiter // 
+DROP trigger IF EXISTS disminuircupos//
+CREATE trigger disminuircupos after insert on matricula
+for each row
+BEGIN
+
+    declare cupo int;
+   select grupo.cupos into cupo
+   from grupo where grupo.id = new.grupo_id;
+    if cupo > 0 then
+		update grupo set cupos = (cupos - 1)  where grupo.id = new.grupo_id;
+	end if;
+
+END//
+delimiter ;
+
+select* from matricula;
+select* from grupo;
+
+update grupo set cupos = 0 where grupo.id = 1;
+insert into matricula values (6,curdate(),20.00,2,1,'bien',0);
+delete from matricula where id = 6;
+
+-- -----------------------------------------------------------------------------------
+
