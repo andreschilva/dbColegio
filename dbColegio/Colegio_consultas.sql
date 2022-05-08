@@ -267,14 +267,15 @@ select count(*)
 from persona 
 where genero = 'F' and telefono is not null;
 
-drop procedure personas_con_letra;
+
 
 delimiter //
+DROP PROCEDURE IF EXISTS personas_con_letra//
 CREATE procedure personas_con_letra(in letra char) 
 BEGIN
-	select * 
+	select *
     from persona
-    where nombres like concat('%',letra,'%');
+    where nombres like concat(letra,'%');
 	
 END//
 delimiter ;
@@ -283,39 +284,83 @@ call personas_con_letra('A');
 
 
 delimiter //
-CREATE procedure personasVaron(out resultado int) 
+DROP PROCEDURE IF EXISTS estudiantesVaron//
+CREATE procedure estudiantesVaron(out resultado int) 
 BEGIN
-	select count(*) into resultado
-	from persona
-	where genero = 'M';
+	select count(estudiante.id) into resultado
+	from persona, estudiante
+	where persona.id = estudiante.id and persona.genero = 'M';
 END//
 delimiter ;
-call personasVaron(@resultado);
-select @resultado
-
-delimiter //
-CREATE procedure personasMujer(out resultado int) 
-BEGIN
-	select count(*) into resultado
-	from persona
-	where genero = 'F';
-END//
-delimiter ;
-call personasMujer(@resultado);
+call estudiantesVaron(@resultado);
 select @resultado
 
 
-drop  procedure porcentajeDePersonasVarones;
+delimiter //
+DROP PROCEDURE IF EXISTS estudiantesMujer//
+CREATE procedure estudiantesMujer(out resultado int) 
+BEGIN
+	select count(estudiante.id) into resultado
+	from persona, estudiante
+	where persona.id = estudiante.id and persona.genero = 'F';
+END//
+delimiter ;
+call estudiantesMujer(@resultado);
+select @resultado;
+
+
+drop  procedure porcentajeEstudiantesVarones;
 
 delimiter //
-CREATE procedure porcentajeDePersonasVarones(out resultado int) 
+DROP PROCEDURE IF EXISTS porcentajeEstudiantesVarones//
+CREATE procedure porcentajeEstudiantesVarones(out resultado int) 
 BEGIN
-	call personasVaron(@cantVarones);
-    call personasMujer(@cantMujeres);
+	call estudiantesVaron(@cantVarones);
+    call estudiantesMujer(@cantMujeres);
     set resultado = (@cantVarones/(@cantVarones + @cantMujeres))*100;
 END//
 delimiter ;
 
-call porcentajeDePersonasVarones(@resultado);
-select @resultado
+call porcentajeEstudiantesVarones(@resultado);
+select @resultado as porcentajeEstudiantesVarones;
+
+-- este procedimiento devulve una tabla  con los estudiantes que tengan una 
+-- nota igual a la que pongamos en su parametro de entrada
+delimiter // 
+DROP PROCEDURE IF EXISTS BuscarEstudiantesConNotaIgualA//
+CREATE procedure BuscarEstudiantesConNotaIgualA(in valorNota int )
+BEGIN
+	select persona.id, persona.nombres, nota.valor, materia.nombre
+    from persona, estudiante, matricula, nota, grupo_materia, materia
+    where persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and matricula.id = nota.matricula_id 
+    and nota.grupo_materia_id = grupo_materia.id and grupo_materia.materia_id = materia.id and nota.valor = valorNota;
+END//
+delimiter ;
+
+select * from nota;
+select * from grupo_materia;
+select * from materia;
+
+call BuscarEstudiantesConNotaIgualA(82);
+
+-- este procedimiento devulve una tabla  con los estudiantes que tengan una 
+-- nota mayor a la que pongamos en su parametro de entrada
+delimiter // 
+DROP PROCEDURE IF EXISTS BuscarEstudiantesConNotaMayorA//
+CREATE procedure BuscarEstudiantesConNotaMayorA(in valorNota int )
+BEGIN
+	select persona.id, persona.nombres, nota.valor, materia.nombre
+    from persona, estudiante, matricula, nota, grupo_materia, materia
+    where persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and matricula.id = nota.matricula_id 
+    and nota.grupo_materia_id = grupo_materia.id and grupo_materia.materia_id = materia.id and nota.valor > valorNota;
+END//
+delimiter ;
+
+select * from nota;
+select * from grupo_materia;
+select * from materia;
+
+call BuscarEstudiantesConNotaMayorA(51);
+
+
 
