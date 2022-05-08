@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
                 
             </form>
-            <p class="m-t"> <small>Colegio T&eacute;cnico Human&iacute;stico de Convenio Mateo Kuljis Ilic &copy; 2021</small> </p>
+            <p class="m-t"> <small>Colegio T&eacute;cnico Human&iacute;stico de Convenio Mateo Kuljis Ilic &copy; 2022</small> </p>
         </div>
     </div>
 
