@@ -45,22 +45,80 @@ and nota.grupo_materia_id = grupo_materia.id and nota.matricula_id = matricula.i
  -- 8) mostrar los permisos que tiene el perfil supAdmin
  select perfil.nombre, funcionalidad.nombre
  from perfil, permiso, funcionalidad
- where perfil.id = permiso.perfil_id and permiso.funcionalidad_id = funcionalidad.id and perfil.nombre = 'supAdmin'
+ where perfil.id = permiso.perfil_id and permiso.funcionalidad_id = funcionalidad.id and perfil.nombre = 'supAdmin';
  
  -- 9) mostrar los estudiantes que tienen una nota menor a 51 en 'matematicas'
- -- 10) mostrar los 4 mejores estudiantes varones por grupos
-  -- 11) mostrar los 4 mejores estudiantes mujeres por grupos
- -- 12) mostrar el  estudiante con mayor nota promedio del colegio
- -- 13)mostrar los estudiantes cuyo apellido inicie con la letra 's'
- -- 14) mostrar los estudiantes inscritos en la gestion 2022
- -- 15) mostrar los docentes por grupo y turno
- -- 16) mostrar los docentes que dicten la materia de 'lenguaje' 
- -- 17) mostrar las notas de los estudiantes del grupo 'primero primaria A'  del periodo numero 1, gestion 2022
- -- 18) mostrar el nombre de los estudiantes que no tienen correo electronico o telefono 
+SELECT persona.nombres
+FROM persona,matricula,nota
+WHERE persona.id = estudiante_id and matricula.id = matricula_id and valor < 51
+group by persona.nombres;
 
-select * from estudiante;
+ -- 10) mostrar los 3 mejores estudiantes varones
+ SELECT persona.nombres,persona.apellido,nota.valor
+ FROM persona, matricula, nota
+ WHERE persona.id = estudiante_id and matricula.id = matricula_id and persona.genero = 'M'
+ GROUP BY persona.nombres
+ ORDER BY nota.valor desc
+ LIMIT 3;
+ 
+ -- 11) mostrar los 3 peores estudiantes mujeres
+ SELECT persona.nombres,persona.apellido,nota.valor
+ FROM persona, matricula, nota
+ WHERE persona.id = estudiante_id and matricula.id = matricula_id and persona.genero = 'F'
+ GROUP BY persona.nombres
+ ORDER BY nota.valor asc
+ LIMIT 3;
+ 
+ -- 12) mostrar el  estudiante con mayor nota promedio del colegio
+SELECT persona.nombres,persona.apellido,MAX(nota.valor)
+ FROM persona, matricula, nota
+ WHERE persona.id = estudiante_id and matricula.id = matricula_id ;
+ 
+ -- 13)mostrar los estudiantes cuyo apellido inicie con la letra 'C'
+SELECT DISTINCT(persona.apellido)
+ FROM persona,estudiante
+ WHERE persona.id in (SELECT id FROM estudiante) and persona.apellido like 'c%';
+
+ -- 14) mostrar los estudiantes inscritos en la gestion 2022
+ SELECT estudiante.*,persona.nombres,gestion.anio
+ FROM estudiante,persona,matricula,grupo,gestion
+ WHERE persona.id = estudiante.id and estudiante.id = matricula.estudiante_id and grupo_id = grupo.id and gestion_id = gestion.id and anio = 2022;
+
+ -- 15) mostrar los docentes por grupo y turno
+ SELECT persona.nombres, persona.apellido, turno.nombre as turno, grupo.nombre as curso 
+ FROM persona,docente,grupo_materia,grupo,turno
+ WHERE docente_id = docente.id and grupo_id = grupo.id and turno_id = turno.id
+ group by persona.nombres, turno.nombre, grupo.nombre;
+ 
+ -- 16) mostrar los docentes que dicten la materia de 'lenguaje' 
+ SELECT distinct(persona.nombres), persona.apellido, docente.id
+ FROM persona, docente, grupo_materia, materia
+ WHERE persona.id = docente.id and docente_id = docente.id and materia_id = materia.id and materia.nombre = 'Lenguaje';
+ 
+ -- 17) mostrar las notas de los estudiantes del grupo 'primero primaria A'  del periodo numero 1, gestion 2022
+ SELECT nota.valor, persona.nombres, persona.apellido
+ FROM persona,estudiante,matricula,grupo,gestion,nota
+ WHERE persona.id = estudiante.id and estudiante.id = estudiante_id and matricula_id = matricula.id and grupo.nombre = 'Primero primaria A' and gestion_id = gestion.id and gestion.anio = 2022;
+ 
+ -- 18) mostrar el nombre de los estudiantes que no tienen correo electronico o telefono 
+ SELECT persona.nombres, persona.apellido
+ FROM persona, estudiante
+ WHERE estudiante.id = persona.id and (persona.telefono = NULL or persona.correo = NULL);
+ -- NOTA: AÑADIR O POBLAR ESTUDIANTES CON CORREO O TELEFONOS NULOS  
+ 
+ -- 19) mostrar las funcionalidades por modulos
+ SELECT funcionalidad.nombre as funcionanlidad,  funcionalidad.id as id_funcionalidad, modulo.nombre as modulo, modulo.id as id_del_modulo
+ FROM funcionalidad, modulo
+WHERE modulo_id = modulo.id;
+ 
+ -- 20) mostrar las funcionalidades del modulo Academico y su estado
+SELECT funcionalidad.nombre as funcionanlidad,  funcionalidad.activo as estado
+FROM funcionalidad, modulo
+WHERE modulo_id = modulo.id and modulo.nombre = 'Academico';
+ 
 select * from persona;
 select * from docente;
+select * from estudiante;
 select * from matricula;
 select * from nota;
 select * from materia;
